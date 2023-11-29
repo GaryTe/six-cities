@@ -1,38 +1,66 @@
-export default function CitiesListComponent(): JSX.Element {
+import { Offers } from '../../types/Response';
+import { getSortOffersByCity } from '../../util/util';
+import { CitiesList } from '../../const';
+
+type CitiesListComponentProps = {
+  state: {
+    offers: Offers;
+    indicatorOffer: {
+      valueCitie: string;
+      valueSort: string;
+      dataOffers: Offers;
+  };
+    onSetIndicatorOffer: React.Dispatch<React.SetStateAction<{
+      valueCitie: string;
+      valueSort: string;
+      dataOffers: Offers;
+  }>>;
+  };
+}
+
+export default function CitiesListComponent({state:{offers, indicatorOffer, onSetIndicatorOffer}}: CitiesListComponentProps): JSX.Element {
+  const {valueCitie, dataOffers} = indicatorOffer;
+
+  const changeLengthOffers = (nameCitie: string) => {
+    let offersList = dataOffers;
+
+    offersList = getSortOffersByCity({
+      offersList: offers,
+      nameCitie: nameCitie,
+    });
+    onSetIndicatorOffer({
+      ...indicatorOffer,
+      valueCitie: nameCitie,
+      dataOffers: offersList
+    });
+  };
+
   return(
     <div className="tabs">
       <section className="locations container">
         <ul className="locations__list tabs__list">
-          <li className="locations__item">
-            <a className="locations__item-link tabs__item" href="#todo">
-              <span>Paris</span>
-            </a>
-          </li>
-          <li className="locations__item">
-            <a className="locations__item-link tabs__item" href="#todo">
-              <span>Cologne</span>
-            </a>
-          </li>
-          <li className="locations__item">
-            <a className="locations__item-link tabs__item" href="#todo">
-              <span>Brussels</span>
-            </a>
-          </li>
-          <li className="locations__item">
-            <a className="locations__item-link tabs__item tabs__item--active" href="#todo">
-              <span>Amsterdam</span>
-            </a>
-          </li>
-          <li className="locations__item">
-            <a className="locations__item-link tabs__item" href="#todo">
-              <span>Hamburg</span>
-            </a>
-          </li>
-          <li className="locations__item">
-            <a className="locations__item-link tabs__item" href="#todo">
-              <span>Dusseldorf</span>
-            </a>
-          </li>
+          { Object.values(CitiesList).map((nameCitie) => (
+            <li
+              className="locations__item"
+              key={nameCitie}
+              onClick={() => {
+                changeLengthOffers(nameCitie);
+              }}
+            >
+              <a
+                className={
+                  valueCitie === nameCitie ?
+                    'locations__item-link tabs__item tabs__item--active'
+                    :
+                    'locations__item-link tabs__item'
+                }
+                href="#todo"
+              >
+                <span>{nameCitie}</span>
+              </a>
+            </li>
+          )
+          )}
         </ul>
       </section>
     </div>

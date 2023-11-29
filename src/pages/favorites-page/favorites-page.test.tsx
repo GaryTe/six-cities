@@ -1,10 +1,13 @@
+import {BrowserRouter} from 'react-router-dom';
 import {render, screen} from '@testing-library/react';
 import FavoritesPage from './favorites-page';
 
 describe('Test page "FavoritesPage"', () => {
   test('Correct page "FavoritesPage" rendering', () => {
     render(
-      <FavoritesPage/>
+      <BrowserRouter>
+        <FavoritesPage/>
+      </BrowserRouter>
     );
 
     expect(screen.getByRole('heading', {name: 'Saved listing'})).toBeInTheDocument();

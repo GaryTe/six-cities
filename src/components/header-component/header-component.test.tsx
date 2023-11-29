@@ -1,14 +1,17 @@
+import {BrowserRouter} from 'react-router-dom';
 import {render, screen} from '@testing-library/react';
 import HeaderComponent from './header-component';
 
 describe('Test component "HeaderComponent"', () => {
   test('Correct component "HeaderComponent" rendering', () => {
     render(
-      <HeaderComponent/>
+      <BrowserRouter>
+        <HeaderComponent/>
+      </BrowserRouter>
     );
 
     expect(screen.getByAltText('6 cities logo')).toBeInTheDocument();
-    expect(screen.getByText('Oliver.conner@gmail.com')).toBeInTheDocument();
-    expect(screen.getByText('Sign out')).toBeInTheDocument();
+    expect(screen.queryByText('Oliver.conner@gmail.com')).not.toBeInTheDocument();
+    expect(screen.getByText('Sign in')).toBeInTheDocument();
   });
 });
