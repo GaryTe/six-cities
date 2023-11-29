@@ -1,10 +1,16 @@
+import {MemoryRouter, Routes, Route} from 'react-router-dom';
 import {render, screen} from '@testing-library/react';
 import PropertyPage from './property-page';
+import { Address } from '../../const';
 
 describe('Test page "PropertyPage"', () => {
   test('Correct page "PropertyPage" rendering', () => {
     render(
-      <PropertyPage/>
+      <MemoryRouter initialEntries={[`${Address.Room}3`]}>
+        <Routes>
+          <Route path={`${Address.Room}:id`} element={<PropertyPage/>} />
+        </Routes>
+      </MemoryRouter>
     );
 
     const itemsImgList = screen.getAllByAltText('studio');

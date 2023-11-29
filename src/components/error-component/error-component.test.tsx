@@ -7,6 +7,7 @@ import {render, screen, fireEvent} from '@testing-library/react';
 import ErrorComponent from './error-component';
 import MainPage from '../../pages/main-page/main-page';
 import { Address } from '../../const';
+import { offers } from '../../mocks/offers';
 
 jest.mock('../../pages/main-page/main-page', () => function mockMainPage (): JSX.Element {
   return(
@@ -20,7 +21,7 @@ const mockRender = (
   <BrowserRouter>
     <Routes>
       <Route path={Address.Main}>
-        <Route index element={<MainPage/>} />
+        <Route index element={<MainPage offers={offers}/>} />
         <Route path={Address.Error} element={<ErrorComponent/>}/>
       </Route>
     </Routes>

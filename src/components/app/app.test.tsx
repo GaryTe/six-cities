@@ -10,6 +10,7 @@ import PrivateRouteComponent from '../private-route-componente.tsx/private-route
 import LoginPage from '../../pages/login-page/login-page';
 import ErrorComponent from '../error-component/error-component';
 import { Address } from '../../const';
+import { offers } from '../../mocks/offers';
 
 const getURL = (url: string): void => {
   window.history.replaceState(
@@ -23,7 +24,7 @@ const mockRender = (
   <BrowserRouter>
     <Routes>
       <Route path={Address.Main}>
-        <Route index element={<MainPage/>} />
+        <Route index element={<MainPage offers={offers}/>} />
         <Route path={Address.Login} element={<LoginPage/>}/>
         <Route path={Address.Favorites} element={<PrivateRouteComponent/>}/>
         <Route path={`${Address.Room}:id`} element={<PropertyPage/>}/>
@@ -39,7 +40,7 @@ describe('Test component "App"', () => {
     render(mockRender);
 
     expect(screen.getByText('Cities')).toBeInTheDocument();
-    expect(screen.getByText(/places to stay in/)).toBeInTheDocument();
+    expect(screen.getByText(/place to stay in/)).toBeInTheDocument();
   });
   test('Correct page "LoginPage" rendering', () => {
 

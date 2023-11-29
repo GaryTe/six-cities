@@ -5,13 +5,18 @@ import PrivateRouteComponent from '../private-route-componente.tsx/private-route
 import LoginPage from '../../pages/login-page/login-page';
 import ErrorComponent from '../error-component/error-component';
 import { Address } from '../../const';
+import { Offers } from '../../types/Response';
 
-function App(): JSX.Element {
+type AppProps = {
+  offers: Offers;
+}
+
+function App({offers}: AppProps): JSX.Element {
   return (
     <BrowserRouter>
       <Routes>
         <Route path={Address.Main}>
-          <Route index element={<MainPage/>} />
+          <Route index element={<MainPage offers={offers}/>} />
           <Route path={Address.Login} element={<LoginPage/>}/>
           <Route path={Address.Favorites} element={<PrivateRouteComponent/>}/>
           <Route path={`${Address.Room}:id`} element={<PropertyPage/>}/>

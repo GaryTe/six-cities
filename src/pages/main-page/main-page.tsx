@@ -1,36 +1,69 @@
+import {
+  useState,
+  useRef
+} from 'react';
 import HeaderComponent from '../../components/header-component/header-component';
 import CitiesListComponent from '../../components/cities-list-component/cities-list-component';
-import OffersListComponent from '../../components/offers-list-component/offers-list-component';
-import CardPlaceComponent from '../../components/card-place-component/card-place-component';
+import SortOffersListComponent from '../../components/sort-offers-list-component/sort-offers-list-component';
+import NotFindPlacesComponent from '../../components/not-find-places-component/not-find-places-component';
+import { Offers } from '../../types/Response';
+import {
+  CitiesList,
+  NameSortList
+} from '../../const';
+import { getSortOffersByCity } from '../../util/util';
 
-export default function MainPage(): JSX.Element {
+type MainPageProps = {
+  offers: Offers;
+};
+
+type IndicatorOffer = {
+  valueCitie: string;
+  valueSort: string;
+  dataOffers: Offers;
+}
+
+export default function MainPage({offers}: MainPageProps): JSX.Element {
+
+  const [indicatorOffer, setIndicatorOffer] = useState<IndicatorOffer>({
+    valueCitie: CitiesList.Paris,
+    valueSort: NameSortList.Popular,
+    dataOffers: offers
+  });
+  const indicatorSort = useRef(true);
+
+  if(indicatorSort.current) {
+    indicatorSort.current = false;
+    const dataOffer = getSortOffersByCity({
+      offersList: offers,
+      nameCitie: CitiesList.Paris
+    });
+    setIndicatorOffer({
+      ...indicatorOffer,
+      dataOffers: dataOffer
+    });
+  }
+
   return(
     <div className="page page--gray page--main">
       <HeaderComponent/>
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
-        <CitiesListComponent/>
+        <CitiesListComponent state={{
+          offers,
+          indicatorOffer,
+          onSetIndicatorOffer: setIndicatorOffer
+        }}
+        />
         <div className="cities">
-          <div className="cities__places-container container">
-            <section className="cities__places places">
-              <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">312 places to stay in Amsterdam</b>
-              <form className="places__sorting" action="#" method="get">
-                <span className="places__sorting-caption">Sort by</span>
-                <span className="places__sorting-type" tabIndex={0}>
-              Popular
-                  <svg className="places__sorting-arrow" width={7} height={4}>
-                    <use xlinkHref="#icon-arrow-select" />
-                  </svg>
-                </span>
-                <OffersListComponent/>
-              </form>
-              <CardPlaceComponent/>
-            </section>
-            <div className="cities__right-section">
-              <section className="cities__map map" />
-            </div>
-          </div>
+          {indicatorOffer.dataOffers?.length !== 0 ?
+            <SortOffersListComponent state={{
+              indicatorOffer,
+              onSetIndicatorOffer: setIndicatorOffer
+            }}
+            />
+            :
+            <NotFindPlacesComponent nameCity={indicatorOffer.valueCitie} />}
         </div>
       </main>
     </div>
