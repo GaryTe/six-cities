@@ -5,11 +5,20 @@ import App from '../app/app';
 import { offers } from '../../mocks/offers';
 import { Address } from '../../const';
 
+const classForElement = {
+  classForDivElement: {
+    firstClass: 'cities__places-list places__list tabs__content',
+    secondClass: 'cities__image-wrapper place-card__image-wrapper'
+  },
+  firstClassForAticleElement: 'cities__card place-card',
+  valueForSlice: offers.length
+};
+
 describe('Test component "CardPlaceComponent"', () => {
   test('Correct component "CardPlaceComponent" rendering', () => {
     render(
       <BrowserRouter>
-        <CardPlaceComponent offers={offers}/>
+        <CardPlaceComponent offers={offers} classForElement={classForElement}/>
       </BrowserRouter>
     );
 
@@ -27,7 +36,7 @@ describe('Test component "CardPlaceComponent"', () => {
   click button in the component "CardPlaceComponent"`, () => {
     render(
       <BrowserRouter>
-        <CardPlaceComponent offers={offers}/>
+        <CardPlaceComponent offers={offers} classForElement={classForElement}/>
       </BrowserRouter>
     );
 

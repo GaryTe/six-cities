@@ -34,3 +34,18 @@ type: string;
 };
 
 export type Offers = Offer[];
+
+export type Review = {
+    comment: string;
+    date: string;
+    id: number;
+    rating: number;
+    user: {
+    avatarUrl: string;
+    id: number;
+    isPro: boolean;
+    name: string;
+    };
+  };
+
+export type ReviewsList = Review[];

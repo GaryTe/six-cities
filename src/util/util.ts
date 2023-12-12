@@ -1,4 +1,10 @@
-import { Offers } from '../types/Response';
+import dayjs from 'dayjs';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import {
+  Offers,
+  ReviewsList,
+  Review
+} from '../types/Response';
 import {
   CitiesList,
   NameSortList,
@@ -11,6 +17,7 @@ type Offer = {
   nameSort?: string | undefined;
 };
 
+dayjs.extend(isSameOrBefore);
 
 export const getSortOffersByCity = (offers: Offer): Offers => {
   const {offersList, nameCitie} = offers;
@@ -95,4 +102,22 @@ const filterBySort = (offersList: Offers, nameSort: string | undefined) => {
 };
 
 const sortAscending = (offersList: Offers, valueKey: 'price' | 'rating') => offersList.sort((a, b) => a[valueKey] - b[valueKey]);
+
+export const humanizingData = (machineData: string) => ({
+  ferstData: dayjs(machineData).format('MMMM/YYYY'),
+  secondData: dayjs(machineData).format('YYYY/MM/DD')
+});
+
+export const filterLatestReviews = (reviews: ReviewsList) => {
+  const sortReviews: ReviewsList = [];
+  reviews.forEach((review: Review) => {
+    if(
+      dayjs().isSameOrBefore(review.date, 'year')
+    ) {
+      sortReviews.push(review);
+    }
+  });
+
+  return sortReviews;
+};
 

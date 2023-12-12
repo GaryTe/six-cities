@@ -47,7 +47,11 @@ export default function MainPage({offers}: MainPageProps): JSX.Element {
   return(
     <div className="page page--gray page--main">
       <HeaderComponent/>
-      <main className="page__main page__main--index">
+      <main className={indicatorOffer.dataOffers?.length !== 0 ?
+        'page__main page__main--index'
+        :
+        'page__main page__main--index page__main--index-empty'}
+      >
         <h1 className="visually-hidden">Cities</h1>
         <CitiesListComponent state={{
           offers,
