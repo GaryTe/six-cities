@@ -1,28 +1,50 @@
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, Link} from 'react-router-dom';
 import { Offers } from '../../types/Response';
 import { Address } from '../../const';
 
 type CardPlaceComponentProps = {
   offers: Offers;
+  classForElement: {
+    classForDivElement: {
+        firstClass: string;
+        secondClass: string;
+    };
+    firstClassForAticleElement: string;
+    valueForSlice: number;
+};
+onSetIdOffer?: React.Dispatch<React.SetStateAction<number>> | (() => void);
 };
 
-export default function CardPlaceComponent({offers}: CardPlaceComponentProps): JSX.Element {
+export default function CardPlaceComponent({
+  offers,
+  classForElement,
+  onSetIdOffer = () => null}: CardPlaceComponentProps): JSX.Element {
 
   const navigate = useNavigate();
 
+  const {
+    classForDivElement:{firstClass, secondClass},
+    firstClassForAticleElement,
+    valueForSlice
+  } = classForElement;
+
   return(
-    <div className="cities__places-list places__list tabs__content">
-      {offers.slice(0,5).map((offer) => {
+    <div className={firstClass}>
+      {offers.slice(0,valueForSlice).map((offer) => {
 
         const {previewImage, isPremium, price, title, type, rating, id} = offer;
 
         return(
-          <article className="cities__card place-card" key={id}>
+          <article
+            className={firstClassForAticleElement} key={id}
+            onMouseOver={() => onSetIdOffer(id)}
+            onMouseOut={() => onSetIdOffer(0)}
+          >
             {isPremium &&
           <div className="place-card__mark">
             <span>Premium</span>
           </div>}
-            <div className="cities__image-wrapper place-card__image-wrapper">
+            <div className={secondClass}>
               <a href="#todo">
                 <img
                   className="place-card__image"
@@ -61,9 +83,9 @@ export default function CardPlaceComponent({offers}: CardPlaceComponentProps): J
                 </div>
               </div>
               <h2 className="place-card__name">
-                <a href="#todo">
+                <Link to={`${Address.Room}${id}`}>
                   {title}
-                </a>
+                </Link>
               </h2>
               <p className="place-card__type">{`${type[0].toUpperCase()}${type.slice(1)}`}</p>
             </div>

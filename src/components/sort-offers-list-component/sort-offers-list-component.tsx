@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import CardPlaceComponent from '../card-place-component/card-place-component';
+import MapComponentForMainPage from '../map-component-for-main-page/map-component-for-main-page';
 import { Offers } from '../../types/Response';
 import { NameSortList } from '../../const';
 import { getSortOffersBySort } from '../../util/util';
@@ -23,6 +24,7 @@ export default function SortOffersListComponent({state:{indicatorOffer, onSetInd
   const {valueCitie, valueSort, dataOffers} = indicatorOffer;
 
   const [isValueSwitch, setIsValueSwitch] = useState(false);
+  const [idOffer, setIdOffer] = useState<number>(0);
 
   const changeLengthOffers = (nameSort: string) => {
     let offersList = dataOffers;
@@ -41,6 +43,15 @@ export default function SortOffersListComponent({state:{indicatorOffer, onSetInd
     }
 
     onSetIndicatorOffer({...indicatorOffer});
+  };
+
+  const classForElement = {
+    classForDivElement: {
+      firstClass: 'cities__places-list places__list tabs__content',
+      secondClass: 'cities__image-wrapper place-card__image-wrapper'
+    },
+    firstClassForAticleElement: 'cities__card place-card',
+    valueForSlice: dataOffers.length
   };
 
   return(
@@ -86,11 +97,9 @@ export default function SortOffersListComponent({state:{indicatorOffer, onSetInd
             )}
           </ul>}
         </form>
-        <CardPlaceComponent offers={dataOffers}/>
+        <CardPlaceComponent offers={dataOffers} classForElement={classForElement} onSetIdOffer={setIdOffer}/>
       </section>
-      <div className="cities__right-section">
-        <section className="cities__map map" />
-      </div>
+      <MapComponentForMainPage offers={dataOffers} idOffer={idOffer}/>
     </div>
   );
 }

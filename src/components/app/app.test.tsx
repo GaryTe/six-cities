@@ -6,7 +6,7 @@ import {
 import {render, screen} from '@testing-library/react';
 import MainPage from '../../pages/main-page/main-page';
 import PropertyPage from '../../pages/property-page/property-page';
-import PrivateRouteComponent from '../private-route-componente.tsx/private-route-component';
+import PrivateRouteComponent from '../private-route-componente/private-route-component';
 import LoginPage from '../../pages/login-page/login-page';
 import ErrorComponent from '../error-component/error-component';
 import { Address } from '../../const';
@@ -27,7 +27,7 @@ const mockRender = (
         <Route index element={<MainPage offers={offers}/>} />
         <Route path={Address.Login} element={<LoginPage/>}/>
         <Route path={Address.Favorites} element={<PrivateRouteComponent/>}/>
-        <Route path={`${Address.Room}:id`} element={<PropertyPage/>}/>
+        <Route path={`${Address.Room}:idex`} element={<PropertyPage offers={offers}/>}/>
         <Route path={Address.Error} element={<ErrorComponent/>}/>
       </Route>
     </Routes>
@@ -66,7 +66,7 @@ describe('Test component "App"', () => {
 
     render(mockRender);
 
-    expect(screen.getByText('Wi-Fi')).toBeInTheDocument();
+    expect(screen.getByText('Baby seat')).toBeInTheDocument();
     expect(screen.getByText('Angelina')).toBeInTheDocument();
   });
   test('Correct component "ErrorComponent" rendering', () => {
