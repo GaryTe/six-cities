@@ -4,12 +4,12 @@ import 'leaflet/dist/leaflet.css';
 import { useCreatMap } from '../../hooks/use-creat-map/use-creat-map';
 import { Offers, Offer } from '../../types/Response';
 
-type MapComponentProps = {
+type MapComponentForPropertyPageProps = {
   offer: Offer;
   offers: Offers;
 };
 
-export default function MapComponentForPropertyPage({offers, offer}: MapComponentProps): JSX.Element {
+export default function MapComponentForPropertyPage({offers, offer}: MapComponentForPropertyPageProps): JSX.Element {
   const mapRef = useRef<HTMLElement | null>(null);
 
   const map = useCreatMap(mapRef, offers);

@@ -7,9 +7,9 @@ import {render, screen, fireEvent} from '@testing-library/react';
 import ErrorComponent from './error-component';
 import MainPage from '../../pages/main-page/main-page';
 import { Address } from '../../const';
-import { offers } from '../../mocks/offers';
+//import { offers } from '../../mocks/offers';
 
-jest.mock('../../pages/main-page/main-page', () => function mockMainPage (): JSX.Element {
+jest.mock('../../pages/main-page/main-page', () => function MockMainPage (): JSX.Element {
   return(
     <div>
         MainPage
@@ -21,7 +21,7 @@ const mockRender = (
   <BrowserRouter>
     <Routes>
       <Route path={Address.Main}>
-        <Route index element={<MainPage offers={offers}/>} />
+        <Route index element={<MainPage/>} />
         <Route path={Address.Error} element={<ErrorComponent/>}/>
       </Route>
     </Routes>
@@ -40,13 +40,13 @@ describe('Test component "ErrorComponent"', () => {
     render(mockRender);
 
     expect(screen.getByText('404 Not Found')).toBeInTheDocument();
-    expect(screen.getByText('Go to home page')).toBeInTheDocument();
+    expect(screen.getByText('Click me')).toBeInTheDocument();
   });
   test('Correct mockPage "MainPage" rendering', () => {
 
     render(mockRender);
 
-    const linkElement = screen.getByText('Go to home page');
+    const linkElement = screen.getByText('Click me');
     expect(linkElement).toBeInTheDocument();
 
     document.addEventListener('click', () => {
@@ -64,7 +64,7 @@ describe('Test component "ErrorComponent"', () => {
       })
     );
 
-    render(mockRender);
+    //render(mockRender);
 
     expect(screen.getByText('MainPage')).toBeInTheDocument();
   });

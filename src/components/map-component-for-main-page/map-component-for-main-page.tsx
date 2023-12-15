@@ -4,12 +4,12 @@ import 'leaflet/dist/leaflet.css';
 import { useCreatMap } from '../../hooks/use-creat-map/use-creat-map';
 import { Offers, Offer } from '../../types/Response';
 
-type MapComponentProps = {
+type MapComponentForMainPageProps = {
   offers: Offers;
   idOffer: number;
 };
 
-export default function MapComponentForMainPage({offers, idOffer}: MapComponentProps): JSX.Element {
+export default function MapComponentForMainPage({offers, idOffer}: MapComponentForMainPageProps): JSX.Element {
   const mapRef = useRef<HTMLElement | null>(null);
   const groupPoints = useRef<LayerGroup | null>(null);
 

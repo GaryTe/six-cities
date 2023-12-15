@@ -59,7 +59,7 @@ describe('Test component "CardPlaceComponent"', () => {
     );
 
     render(
-      <App offers={offers}/>
+      <App/>
     );
 
     expect(screen.getByTestId('email')).toBeInTheDocument();

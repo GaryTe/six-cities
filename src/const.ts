@@ -33,3 +33,16 @@ export const ValueKey = {
   Price: 'price',
   Rating: 'rating'
 } as const;
+
+export const NameReducer = {
+  Offers: 'offers',
+  Reviews: 'reviews'
+} as const;
+
+export const Rating = {
+  Perfect: 'perfect',
+  Good: 'good',
+  'Not bad': 'not bad',
+  Badly: 'badly',
+  Terribly: 'terribly'
+} as const;
