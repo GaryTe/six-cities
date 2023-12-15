@@ -1,10 +1,12 @@
-import { reviews } from '../../mocks/reviews';
+import { useAppSelector } from '../../hooks/hooks-store/hooks-store';
+import { storageReviews } from '../../store/slice-reducer/reviews-list-slice/reviews-list-slice';
 import {
   humanizingData,
   filterLatestReviews
 } from '../../util/util';
 
 export default function ReviewComponent(): JSX.Element {
+  const {reviews} = useAppSelector(storageReviews);
 
   if(reviews.length === 0) {
     return(

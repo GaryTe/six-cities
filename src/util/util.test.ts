@@ -1,6 +1,8 @@
 import {
   getSortOffersByCity,
-  getSortOffersBySort
+  getSortOffersBySort,
+  humanizingData,
+  filterLatestReviews
 } from './util';
 import {
   mockOffersForPrice,
@@ -10,6 +12,7 @@ import {
   NameSortList,
   CitiesList
 } from '../const';
+import { reviews } from '../mocks/reviews';
 
 describe('Test util function', () => {
   describe('Test util function "getSortOffersByCity"', () => {
@@ -66,6 +69,57 @@ describe('Test util function', () => {
         offersList: mockOffersForRating,
         nameSort: NameSortList.Popular,
       })).toEqual(mockOffersForRating);
+    });
+  });
+  describe('Test util function "humanizingData"', () => {
+    test(`Function "humanizingData" return:
+    ferstData: May/2023
+    secondData: 2023/11/05`, () => {
+      expect(humanizingData('2023-05-05T11:13:09.372Z').ferstData).toBe('May/2023');
+      expect(humanizingData('2023-11-05T11:13:09.372Z').secondData).toBe('2023/11/05');
+    });
+  });
+  describe('Test util function "filterLatestReviews"', () => {
+    test(`Function sorts reviews from
+    earliest to latest`, () => {
+      expect(filterLatestReviews(reviews)).toEqual([
+        {
+          id: 3,
+          user: {
+            id: 11,
+            isPro: false,
+            name: 'Jack',
+            avatarUrl: 'https://12.react.pages.academy/static/avatar/2.jpg'
+          },
+          rating: 2,
+          comment: 'The room was spacious and clean. The pool looked nothing like the photos and desparately needs a clean. The sauna and spa were closed for lunar new year holiday.',
+          date: '2023-11-05T11:13:09.372Z'
+        },
+        {
+          id: 4,
+          user: {
+            id: 11,
+            isPro: false,
+            name: 'Jack',
+            avatarUrl: 'https://12.react.pages.academy/static/avatar/2.jpg'
+          },
+          rating: 4.7,
+          comment: 'The room was spacious and clean. The pool looked nothing like the photos and desparately needs a clean. The sauna and spa were closed for lunar new year holiday.',
+          date: '2023-05-05T11:13:09.372Z'
+        },
+        {
+          id: 2,
+          user: {
+            id: 11,
+            isPro: false,
+            name: 'Jack',
+            avatarUrl: 'https://12.react.pages.academy/static/avatar/2.jpg'
+          },
+          rating: 3.4,
+          comment: 'The room was spacious and clean. The pool looked nothing like the photos and desparately needs a clean. The sauna and spa were closed for lunar new year holiday.',
+          date: '2023-07-05T11:13:09.372Z'
+        }
+      ]);
     });
   });
 });

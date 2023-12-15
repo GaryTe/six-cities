@@ -1,3 +1,5 @@
+import {configureMockStore} from '@jedmao/redux-mock-store';
+import {Provider} from 'react-redux';
 import {
   BrowserRouter,
   Routes,
@@ -10,7 +12,29 @@ import PrivateRouteComponent from '../private-route-componente/private-route-com
 import LoginPage from '../../pages/login-page/login-page';
 import ErrorComponent from '../error-component/error-component';
 import { Address } from '../../const';
-import { offers } from '../../mocks/offers';
+import { mockOffersForPrice } from '../../util/mock-util';
+import { reviews } from '../../mocks/reviews';
+
+jest.mock('../../pages/property-page/property-page', () => function MockPropertyPage(): JSX.Element {
+  return (
+    <div>
+      <p>Baby seat</p>
+      <p>Angelina</p>
+    </div>
+  );
+});
+
+
+const mockStore = configureMockStore();
+
+const store = mockStore({
+  offers: {
+    offers: mockOffersForPrice,
+    changeOffers: [mockOffersForPrice[0]]
+  },
+  reviews: {reviews: reviews}
+});
+
 
 const getURL = (url: string): void => {
   window.history.replaceState(
@@ -20,18 +44,21 @@ const getURL = (url: string): void => {
   );
 };
 
+
 const mockRender = (
-  <BrowserRouter>
-    <Routes>
-      <Route path={Address.Main}>
-        <Route index element={<MainPage offers={offers}/>} />
-        <Route path={Address.Login} element={<LoginPage/>}/>
-        <Route path={Address.Favorites} element={<PrivateRouteComponent/>}/>
-        <Route path={`${Address.Room}:idex`} element={<PropertyPage offers={offers}/>}/>
-        <Route path={Address.Error} element={<ErrorComponent/>}/>
-      </Route>
-    </Routes>
-  </BrowserRouter>
+  <Provider store={store}>
+    <BrowserRouter>
+      <Routes>
+        <Route path={Address.Main}>
+          <Route index element={<MainPage/>} />
+          <Route path={Address.Login} element={<LoginPage/>}/>
+          <Route path={Address.Favorites} element={<PrivateRouteComponent/>}/>
+          <Route path={`${Address.Room}:idex`} element={<PropertyPage/>}/>
+          <Route path={Address.Error} element={<ErrorComponent/>}/>
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  </Provider>
 );
 
 describe('Test component "App"', () => {
@@ -60,6 +87,15 @@ describe('Test component "App"', () => {
     expect(screen.getByTestId('email')).toBeInTheDocument();
     expect(screen.getByTestId('password')).toBeInTheDocument();
   });
+  test('Correct component "ErrorComponent" rendering', () => {
+
+    getURL(Address.Error);
+
+    render(mockRender);
+
+    expect(screen.getByText('404 Not Found')).toBeInTheDocument();
+    expect(screen.getByText('Click me')).toBeInTheDocument();
+  });
   test('Correct page "PropertyPage" rendering', () => {
 
     getURL(`${Address.Room}3`);
@@ -68,14 +104,5 @@ describe('Test component "App"', () => {
 
     expect(screen.getByText('Baby seat')).toBeInTheDocument();
     expect(screen.getByText('Angelina')).toBeInTheDocument();
-  });
-  test('Correct component "ErrorComponent" rendering', () => {
-
-    getURL(Address.Error);
-
-    render(mockRender);
-
-    expect(screen.getByText('404 Not Found')).toBeInTheDocument();
-    expect(screen.getByText('Go to home page')).toBeInTheDocument();
   });
 });

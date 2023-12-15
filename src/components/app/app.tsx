@@ -5,21 +5,16 @@ import PrivateRouteComponent from '../private-route-componente/private-route-com
 import LoginPage from '../../pages/login-page/login-page';
 import ErrorComponent from '../error-component/error-component';
 import { Address } from '../../const';
-import { Offers } from '../../types/Response';
 
-type AppProps = {
-  offers: Offers;
-}
-
-function App({offers}: AppProps): JSX.Element {
+function App(): JSX.Element {
   return (
     <BrowserRouter>
       <Routes>
         <Route path={Address.Main}>
-          <Route index element={<MainPage offers={offers}/>} />
+          <Route index element={<MainPage/>} />
           <Route path={Address.Login} element={<LoginPage/>}/>
           <Route path={Address.Favorites} element={<PrivateRouteComponent/>}/>
-          <Route path={`${Address.Room}:idex`} element={<PropertyPage offers={offers}/>}/>
+          <Route path={`${Address.Room}:idex`} element={<PropertyPage/>}/>
           <Route path={Address.Error} element={<ErrorComponent/>}/>
         </Route>
       </Routes>

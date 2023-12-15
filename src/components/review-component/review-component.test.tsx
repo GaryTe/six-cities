@@ -1,15 +1,25 @@
+import {configureMockStore} from '@jedmao/redux-mock-store';
+import {Provider} from 'react-redux';
+import {BrowserRouter} from 'react-router-dom';
 import {render, screen} from '@testing-library/react';
 import ReviewComponent from './review-component';
 import { reviews } from '../../mocks/reviews';
-import { mockReviews } from '../../util/mock-util';
 
-jest.mock('../../mocks/reviews');
+const mockStore = configureMockStore();
 
 describe('Test component "ReviewComponent"', () => {
   test('Correct component "ReviewComponent" rendering', () => {
-    reviews.push(...mockReviews);
+    const store = mockStore({
+      reviews: {reviews: reviews}
+    });
 
-    render(<ReviewComponent/>);
+    render(
+      <Provider store={store}>
+        <BrowserRouter>
+          <ReviewComponent/>
+        </BrowserRouter>
+      </Provider>
+    );
 
     expect(screen.getByText('Reviews ·')).toBeInTheDocument();
 
@@ -24,11 +34,17 @@ describe('Test component "ReviewComponent"', () => {
     });
   });
   test('If the array is null then rendering "No reviews"',() => {
-    reviews.shift();
-    reviews.shift();
-    reviews.shift();
+    const store = mockStore({
+      reviews: {reviews: []}
+    });
 
-    render(<ReviewComponent/>);
+    render(
+      <Provider store={store}>
+        <BrowserRouter>
+          <ReviewComponent/>
+        </BrowserRouter>
+      </Provider>
+    );
 
     expect(screen.getByText('No reviews.')).toBeInTheDocument();
   });

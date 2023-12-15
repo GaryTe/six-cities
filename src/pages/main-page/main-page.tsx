@@ -1,7 +1,4 @@
-import {
-  useState,
-  useRef
-} from 'react';
+import { useState } from 'react';
 import HeaderComponent from '../../components/header-component/header-component';
 import CitiesListComponent from '../../components/cities-list-component/cities-list-component';
 import SortOffersListComponent from '../../components/sort-offers-list-component/sort-offers-list-component';
@@ -11,11 +8,8 @@ import {
   CitiesList,
   NameSortList
 } from '../../const';
-import { getSortOffersByCity } from '../../util/util';
-
-type MainPageProps = {
-  offers: Offers;
-};
+import { useAppSelector } from '../../hooks/hooks-store/hooks-store';
+import { storageOffers } from '../../store/slice-reducer/offers-list-slice/offers-list-slice';
 
 type IndicatorOffer = {
   valueCitie: string;
@@ -23,26 +17,14 @@ type IndicatorOffer = {
   dataOffers: Offers;
 }
 
-export default function MainPage({offers}: MainPageProps): JSX.Element {
+export default function MainPage(): JSX.Element {
+  const {offers, changeOffers} = useAppSelector(storageOffers);
 
   const [indicatorOffer, setIndicatorOffer] = useState<IndicatorOffer>({
     valueCitie: CitiesList.Paris,
     valueSort: NameSortList.Popular,
-    dataOffers: offers
+    dataOffers: changeOffers
   });
-  const indicatorSort = useRef(true);
-
-  if(indicatorSort.current) {
-    indicatorSort.current = false;
-    const dataOffer = getSortOffersByCity({
-      offersList: offers,
-      nameCitie: CitiesList.Paris
-    });
-    setIndicatorOffer({
-      ...indicatorOffer,
-      dataOffers: dataOffer
-    });
-  }
 
   return(
     <div className="page page--gray page--main">
