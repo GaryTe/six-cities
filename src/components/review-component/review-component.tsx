@@ -4,14 +4,33 @@ import {
   humanizingData,
   filterLatestReviews
 } from '../../util/util';
+import './text-loding.css';
 
 export default function ReviewComponent(): JSX.Element {
-  const {reviews} = useAppSelector(storageReviews);
+  const {loading, reviews, typeError} = useAppSelector(storageReviews);
+
+  if(loading) {
+    return(
+      <p className='text-loding'>
+        ...Loading comments. Wait please.
+      </p>
+    );
+  }
+
+  if(typeError) {
+    return(
+      <p className="text-loding" style={{backgroundColor: 'red'}}>
+        ${typeError.code}<br></br>
+        <br></br>
+        Could not get comments.
+      </p>
+    );
+  }
 
   if(reviews.length === 0) {
     return(
-      <p className="reviews__text">
-No reviews.
+      <p className="text-loding">
+        No reviews.
       </p>
     );
   }

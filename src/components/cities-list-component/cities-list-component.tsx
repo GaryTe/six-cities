@@ -1,4 +1,4 @@
-import { Offers } from '../../types/Response';
+import { Offers } from '../../types/response';
 import { getSortOffersByCity } from '../../util/util';
 import { CitiesList } from '../../const';
 

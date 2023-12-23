@@ -49,3 +49,26 @@ export type Review = {
   };
 
 export type ReviewsList = Review[];
+
+export type DataAuthorization = {
+  avatarUrl: string;
+  email: string;
+  id: number;
+  isPro: boolean;
+  name: string;
+  token: string;
+  };
+
+export type Error = {
+    error: string;
+    };
+
+export type UserData = {
+        email: string;
+        password: string;
+    };
+
+export type ValueStatus = {
+        hotelId: number;
+        status: boolean;
+    };

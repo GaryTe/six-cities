@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import CardPlaceComponent from '../card-place-component/card-place-component';
 import MapComponentForMainPage from '../map-component-for-main-page/map-component-for-main-page';
-import { Offers } from '../../types/Response';
+import { Offers } from '../../types/response';
 import { NameSortList } from '../../const';
 import { getSortOffersBySort } from '../../util/util';
 

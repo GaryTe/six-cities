@@ -3,13 +3,15 @@ import HeaderComponent from '../../components/header-component/header-component'
 import CitiesListComponent from '../../components/cities-list-component/cities-list-component';
 import SortOffersListComponent from '../../components/sort-offers-list-component/sort-offers-list-component';
 import NotFindPlacesComponent from '../../components/not-find-places-component/not-find-places-component';
-import { Offers } from '../../types/Response';
+import { Offers } from '../../types/response';
 import {
   CitiesList,
   NameSortList
 } from '../../const';
 import { useAppSelector } from '../../hooks/hooks-store/hooks-store';
 import { storageOffers } from '../../store/slice-reducer/offers-list-slice/offers-list-slice';
+import '../../components/loading-main-page-component/loading-items.css';
+import './parameters-text-error.css';
 
 type IndicatorOffer = {
   valueCitie: string;
@@ -18,13 +20,23 @@ type IndicatorOffer = {
 }
 
 export default function MainPage(): JSX.Element {
-  const {offers, changeOffers} = useAppSelector(storageOffers);
+  const {offers, changeOffers, typeError} = useAppSelector(storageOffers);
 
   const [indicatorOffer, setIndicatorOffer] = useState<IndicatorOffer>({
     valueCitie: CitiesList.Paris,
     valueSort: NameSortList.Popular,
     dataOffers: changeOffers
   });
+
+  if(typeError) {
+    return(
+      <div className='loading-items'>
+        <p className='parameters-text-error'>
+          {typeError.code}
+        </p>
+      </div>
+    );
+  }
 
   return(
     <div className="page page--gray page--main">

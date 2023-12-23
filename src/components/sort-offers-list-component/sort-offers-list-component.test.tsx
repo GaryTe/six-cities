@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {BrowserRouter} from 'react-router-dom';
 import {render, screen, fireEvent} from '@testing-library/react';
 import SortOffersListComponent from './sort-offers-list-component';
-import { Offers } from '../../types/Response';
+import { Offers } from '../../types/response';
 import {
   CitiesList,
   NameSortList

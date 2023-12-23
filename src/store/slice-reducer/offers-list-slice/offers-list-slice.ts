@@ -4,26 +4,34 @@ import { RootState } from '../../store/store';
 import { NameReducer } from '../../../const';
 import { getSortOffersByCity } from '../../../util/util';
 import { CitiesList } from '../../../const';
-import { offers } from '../../../mocks/offers';
+import { requestToGetOffersList } from '../../../api/request';
 
 const initialState: StorageOffers = {
-  offers: offers,
-  changeOffers: []
+  loading: true,
+  offers: [],
+  changeOffers: [],
+  typeError: null
 };
 
 export const offersListSlice = createSlice({
   name: NameReducer.Offers,
   initialState,
-  reducers: {
-    filterOffersByCity: (state) => {
-      state.changeOffers = getSortOffersByCity({
-        offersList: offers,
-        nameCitie: CitiesList.Paris
+  reducers: {},
+  extraReducers:(builder) => {
+    builder
+      .addCase(requestToGetOffersList.fulfilled, (state, action) => {
+        state.offers = action.payload;
+        state.changeOffers = getSortOffersByCity({
+          offersList: action.payload,
+          nameCitie: CitiesList.Paris
+        });
+        state.loading = false;
+      })
+      .addCase(requestToGetOffersList.rejected, (state, action) => {
+        state.typeError = action.error;
+        state.loading = false;
       });
-    }
   }
 });
-
-export const {filterOffersByCity} = offersListSlice.actions;
 
 export const storageOffers = (state: RootState) => state.offers;
