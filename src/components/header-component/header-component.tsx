@@ -1,12 +1,26 @@
-import {Link} from 'react-router-dom';
+import {Link, useLocation} from 'react-router-dom';
 import {
   Address,
-  isAuthorizationStatus,
+  AuthorizationStatus,
   UserStatus
 } from '../../const';
+import {
+  useAppSelector,
+  useAppDispatch
+} from '../../hooks/hooks-store/hooks-store';
+import { storageAuthorization } from '../../store/slice-reducer/authorization-slice/authorization-slice';
+import { storageOffersListFavorite } from '../../store/slice-reducer/favorite-slice/favorite-slice';
+import { requestEndUserSession } from '../../api/request';
 
 export default function HeaderComponent(): JSX.Element {
+  const {isAuthorizationStatus, dataAuthorization} = useAppSelector(storageAuthorization);
+  const {offersList} = useAppSelector(storageOffersListFavorite);
+
+  const {pathname} = useLocation();
+
+  const dispatch = useAppDispatch();
   const {SignIn, SingOut} = UserStatus;
+
   return(
     <header className="header">
       <div className="container">
@@ -24,24 +38,35 @@ export default function HeaderComponent(): JSX.Element {
           </div>
           <nav className="header__nav">
             <ul className="header__nav-list">
-              {isAuthorizationStatus &&
+              {isAuthorizationStatus === AuthorizationStatus.Auth &&
               <li className="header__nav-item user">
                 <Link
                   className="header__nav-link header__nav-link--profile"
                   to={Address.Favorites}
                 >
-                  <div className="header__avatar-wrapper user__avatar-wrapper"></div>
-                  <span className="header__user-name user__name">
-                  Oliver.conner@gmail.com
+                  <div
+                    className="header__avatar-wrapper user__avatar-wrapper"
+                    style={{backgroundImage: `url(${dataAuthorization?.avatarUrl ?? '../img/avatar.svg'})`}}
+                  >
+                  </div>
+                  <span
+                    className="header__user-name user__name"
+                  >
+                    {dataAuthorization?.email}
                   </span>
-                  <span className="header__favorite-count">3</span>
+                  <span className="header__favorite-count">{offersList.length}</span>
                 </Link>
               </li>}
               <li className="header__nav-item">
-                {isAuthorizationStatus ?
-                  <span className="header__signout">{SingOut}</span>
+                {isAuthorizationStatus === AuthorizationStatus.Auth ?
+                  <span
+                    className="header__signout"
+                    onClick={() => {dispatch(requestEndUserSession());}}
+                  >
+                    {SingOut}
+                  </span>
                   :
-                  <Link className="header__nav-link" to={Address.Login}>
+                  <Link className="header__nav-link" to={Address.Login} state={pathname}>
                     <span className="header__login">{SignIn}</span>
                   </Link>}
               </li>

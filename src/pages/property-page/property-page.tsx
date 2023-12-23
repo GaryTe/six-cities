@@ -1,24 +1,31 @@
-import {useParams, useNavigate, useLocation} from 'react-router-dom';
+import {useNavigate, useLocation, Link} from 'react-router-dom';
 import { useEffect } from 'react';
 import HeaderComponent from '../../components/header-component/header-component';
 import ErrorComponent from '../../components/error-component/error-component';
 import ReviewComponent from '../../components/review-component/review-component';
-import CardPlaceComponent from '../../components/card-place-component/card-place-component';
+import LoadingCardPlaceComponent from '../../components/loading-card-place-component/loading-card-place-component';
 import MapComponentForPropertyPage from '../../components/map-component-for-property-page/map-component-for-property-page';
 import FeedbackFormComponent from '../../components/feedback-form-component/feedback-form-component';
-import { Offer } from '../../types/Response';
-import { getSortOffersByCity } from '../../util/util';
-import { Address } from '../../const';
-import { useAppSelector } from '../../hooks/hooks-store/hooks-store';
-import { storageOffers } from '../../store/slice-reducer/offers-list-slice/offers-list-slice';
+import { Address, AuthorizationStatus } from '../../const';
+import {
+  useAppSelector,
+  useAppDispatch
+} from '../../hooks/hooks-store/hooks-store';
+import { requestChangesStatus } from '../../api/request';
+import { storageOffer } from '../../store/slice-reducer/offer-slice/offer-slice';
+import { storageOffersNearby } from '../../store/slice-reducer/offers-nearby-slice/offers-nearby-slice';
+import { storageAuthorization } from '../../store/slice-reducer/authorization-slice/authorization-slice';
+
 
 export default function PropertyPage(): JSX.Element {
-  const {offers} = useAppSelector(storageOffers);
+  const {offer, typeError} = useAppSelector(storageOffer);
+  const {offersListNearby} = useAppSelector(storageOffersNearby);
+  const {isAuthorizationStatus} = useAppSelector(storageAuthorization);
 
   const {pathname} = useLocation();
   const navigate = useNavigate();
-  const {idex} = useParams<string>();
-  const dataOffer: Offer | undefined = offers.find((offer) => offer.id === Number(idex));
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     window.scrollTo({
@@ -28,19 +35,32 @@ export default function PropertyPage(): JSX.Element {
     });
   },[pathname]);
 
-  if(!dataOffer) {
-    return <ErrorComponent/>;
+  if(typeError) {
+    return(
+      <div className='loading-items'>
+        <p className='parameters-text-error'>
+          {typeError.code}<br></br>
+          <br></br>
+          <Link
+            style={{fontFamily: 'serif'}}
+            to={Address.Main}
+          >
+            Click me for go back to main page.
+          </Link>
+        </p>
+      </div>
+    );
   }
 
-  const offersNear = getSortOffersByCity({
-    offersList: offers,
-    nameCitie: dataOffer.city.name
-  });
+  if(!offer) {
+    return <ErrorComponent/>;
+  }
 
   const {
     images,
     title,
     description,
+    isFavorite,
     isPremium,
     type,
     rating,
@@ -48,8 +68,9 @@ export default function PropertyPage(): JSX.Element {
     maxAdults,
     price,
     goods,
-    host
-  } = dataOffer;
+    host,
+    id
+  } = offer;
 
   const {name, isPro, avatarUrl} = host;
 
@@ -92,8 +113,19 @@ export default function PropertyPage(): JSX.Element {
                 </h1>
                 <button
                   className="property__bookmark-button button"
+                  style={{backgroundColor: isFavorite ? '#4481c3' : ''}}
                   type="button"
-                  onClick={() => navigate(Address.Favorites)}
+                  onClick={() => {
+                    if(isAuthorizationStatus) {
+                      dispatch(requestChangesStatus({
+                        hotelId: id,
+                        status: !isFavorite
+                      }));
+                    }
+                    navigate(Address.Favorites, {
+                      state: {hotelId: id, status: !isFavorite}
+                    });
+                  }}
                 >
                   <svg className="property__bookmark-icon" width={31} height={33}>
                     <use xlinkHref="#icon-bookmark" />
@@ -152,18 +184,21 @@ export default function PropertyPage(): JSX.Element {
               </div>
               <section className="property__reviews reviews">
                 <ReviewComponent/>
-                <FeedbackFormComponent/>
+                {isAuthorizationStatus === AuthorizationStatus.Auth && <FeedbackFormComponent/>}
               </section>
             </div>
           </div>
-          <MapComponentForPropertyPage offer={dataOffer} offers={offersNear.slice(0,4)} />
+          <MapComponentForPropertyPage
+            offer={offer}
+            offers={[offer, ...offersListNearby].slice(0,4)}
+          />
         </section>
         <div className="container">
           <section className="near-places places">
             <h2 className="near-places__title">
           Other places in the neighbourhood
             </h2>
-            <CardPlaceComponent offers={offersNear} classForElement={classForElement}/>
+            <LoadingCardPlaceComponent classForElement={classForElement}/>
           </section>
         </div>
       </main>

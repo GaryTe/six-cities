@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {render, screen} from '@testing-library/react';
 import CitiesListComponent from './cities-list-component';
-import { Offers } from '../../types/Response';
+import { Offers } from '../../types/response';
 import { offers } from '../../mocks/offers';
 import {
   CitiesList,

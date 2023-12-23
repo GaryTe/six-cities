@@ -1,21 +1,19 @@
 import {useRef, useEffect} from 'react';
-import L from 'leaflet';
+import L, {LayerGroup} from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useCreatMap } from '../../hooks/use-creat-map/use-creat-map';
-import { Offers, Offer } from '../../types/Response';
+import { Offers, Offer } from '../../types/response';
 
 type MapComponentForPropertyPageProps = {
   offer: Offer;
   offers: Offers;
 };
 
-export default function MapComponentForPropertyPage({offers, offer}: MapComponentForPropertyPageProps): JSX.Element {
+export default function MapComponentForPropertyPage({offer, offers}: MapComponentForPropertyPageProps): JSX.Element {
   const mapRef = useRef<HTMLElement | null>(null);
-
-  const map = useCreatMap(mapRef, offers);
+  const groupPoints = useRef<LayerGroup | null>(null);
 
   useEffect(() => {
-    if(map === null) {return;}
 
     const activeCustomIcon = L.icon({
       iconUrl: 'img/pin-active.svg',
@@ -29,7 +27,7 @@ export default function MapComponentForPropertyPage({offers, offer}: MapComponen
       iconAnchor: [20, 40],
     });
 
-    const layerGroup = L.layerGroup().addTo(map);
+    const layerGroup = L.layerGroup();
 
     offers.forEach((dataOffer: Offer) => {
       const {location:{latitude, longitude}} = dataOffer;
@@ -40,11 +38,19 @@ export default function MapComponentForPropertyPage({offers, offer}: MapComponen
       marker.addTo(layerGroup);
 
     });
+    groupPoints.current = layerGroup;
 
     return () => {
       layerGroup.clearLayers();
+      groupPoints.current = null;
     };
-  },[map, offer, offers]);
+  },[offer, offers]);
+
+  const map = useCreatMap(mapRef, offers);
+
+  if(map !== null && groupPoints.current !== null) {
+    groupPoints.current.addTo(map);
+  }
 
   return(
     <section

@@ -2,7 +2,7 @@ import {useRef, useEffect} from 'react';
 import L, {LayerGroup} from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useCreatMap } from '../../hooks/use-creat-map/use-creat-map';
-import { Offers, Offer } from '../../types/Response';
+import { Offers, Offer } from '../../types/response';
 
 type MapComponentForMainPageProps = {
   offers: Offers;

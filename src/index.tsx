@@ -3,9 +3,15 @@ import ReactDOM from 'react-dom/client';
 import {Provider} from 'react-redux';
 import App from './components/app/app';
 import { store } from './store/store/store';
-import { filterOffersByCity } from './store/slice-reducer/offers-list-slice/offers-list-slice';
+import {
+  requestToGetOffersList,
+  requestCheckingAuthorizationStatus,
+  requestOffersListFavorite
+} from './api/request';
 
-store.dispatch(filterOffersByCity());
+store.dispatch(requestToGetOffersList());
+store.dispatch(requestOffersListFavorite());
+store.dispatch(requestCheckingAuthorizationStatus());
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,

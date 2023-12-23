@@ -1,5 +1,16 @@
 import {useNavigate, Link} from 'react-router-dom';
-import { Offers } from '../../types/Response';
+import {
+  useAppDispatch,
+  useAppSelector
+} from '../../hooks/hooks-store/hooks-store';
+import {
+  requestToGetOffer,
+  requestToGetReviews,
+  requestToGetOffersNearby,
+  requestChangesStatus
+} from '../../api/request';
+import { storageAuthorization } from '../../store/slice-reducer/authorization-slice/authorization-slice';
+import { Offers } from '../../types/response';
 import { Address } from '../../const';
 
 type CardPlaceComponentProps = {
@@ -20,6 +31,8 @@ export default function CardPlaceComponent({
   classForElement,
   onSetIdOffer = () => null}: CardPlaceComponentProps): JSX.Element {
 
+  const {isAuthorizationStatus} = useAppSelector(storageAuthorization);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const {
@@ -28,11 +41,19 @@ export default function CardPlaceComponent({
     valueForSlice
   } = classForElement;
 
+  if(offers.length === 0) {
+    return(
+      <p className="text-loding">
+        No offers nearby.
+      </p>
+    );
+  }
+
   return(
     <div className={firstClass}>
       {offers.slice(0,valueForSlice).map((offer) => {
 
-        const {previewImage, isPremium, price, title, type, rating, id} = offer;
+        const {previewImage, isFavorite, isPremium, price, title, type, rating, id} = offer;
 
         return(
           <article
@@ -62,9 +83,19 @@ export default function CardPlaceComponent({
                   <span className="place-card__price-text">/&nbsp;night</span>
                 </div>
                 <button
-                  className="place-card__bookmark-button place-card__bookmark-button--active button"
+                  className={!isFavorite ? 'place-card__bookmark-button button' : 'place-card__bookmark-button place-card__bookmark-button--active button'}
                   type="button"
-                  onClick={() => navigate(Address.Favorites)}
+                  onClick={() => {
+                    if(isAuthorizationStatus) {
+                      dispatch(requestChangesStatus({
+                        hotelId: id,
+                        status: !isFavorite
+                      }));
+                    }
+                    navigate(Address.Favorites, {
+                      state: {hotelId: id, status: !isFavorite}
+                    });
+                  }}
                 >
                   <svg
                     className="place-card__bookmark-icon"
@@ -83,7 +114,14 @@ export default function CardPlaceComponent({
                 </div>
               </div>
               <h2 className="place-card__name">
-                <Link to={`${Address.Room}${id}`}>
+                <Link
+                  onClick={() => {
+                    dispatch(requestToGetOffer(id));
+                    dispatch(requestToGetReviews(id));
+                    dispatch(requestToGetOffersNearby(id));
+                  }}
+                  to={`${Address.Room}${id}`}
+                >
                   {title}
                 </Link>
               </h2>

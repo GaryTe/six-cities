@@ -1,4 +1,4 @@
-import { Offers } from '../types/Response';
+import { Offers } from '../types/response';
 
 export const offers: Offers = [
   {

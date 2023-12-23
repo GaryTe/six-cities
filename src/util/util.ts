@@ -2,20 +2,26 @@ import dayjs from 'dayjs';
 import {
   Offers,
   ReviewsList,
-} from '../types/Response';
+  Offer
+} from '../types/response';
 import {
   CitiesList,
   NameSortList,
   ValueKey
 } from '../const';
 
-type Offer = {
+type valueOffer = {
   offersList: Offers;
   nameCitie?: string | undefined;
   nameSort?: string | undefined;
 };
 
-export const getSortOffersByCity = (offers: Offer): Offers => {
+type DataOffersList = {
+  nameCity: string;
+  offers: Offers;
+}
+
+export const getSortOffersByCity = (offers: valueOffer): Offers => {
   const {offersList, nameCitie} = offers;
   let dataOffer: Offers = offersList;
 
@@ -24,7 +30,7 @@ export const getSortOffersByCity = (offers: Offer): Offers => {
   return dataOffer;
 };
 
-export const getSortOffersBySort = (offers: Offer): Offers => {
+export const getSortOffersBySort = (offers: valueOffer): Offers => {
   const {offersList, nameSort} = offers;
   let dataOffer: Offers = offersList;
 
@@ -116,3 +122,36 @@ export const filterLatestReviews = (reviews: ReviewsList) => reviews.slice().sor
   return 0;
 }).reverse();
 
+export const checkEmail = (email: string): boolean => {
+  const value =
+  /^((([0-9A-Za-z]{1}[-0-9A-z.]{1,}[0-9A-Za-z]{1})|([0-9А-Яа-я]{1}[-0-9А-я.]{1,}[0-9А-Яа-я]{1}))@([-A-Za-z]{1,}\.){1,2}[-A-Za-z]{2,})$/
+    .test(email);
+  return value;
+};
+
+export const checkPassword = (password: string): boolean => {
+  const value = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{2,}$/.test(password);
+  return value;
+};
+
+export const sortOffersByCity = (offersList: Offers) => {
+  const dataOffersList: Array<DataOffersList> = [];
+  const setNameCity = new Set();
+
+  offersList.forEach((offer: Offer) => {
+    const {city: {name}} = offer;
+
+    if(setNameCity.has(name)) {return;}
+
+    setNameCity.add(name);
+    const sortOffersList = offersList.filter((dataOffer) => dataOffer.city.name === name);
+    const dataOffer = {
+      nameCity: name,
+      offers: sortOffersList
+    };
+
+    dataOffersList.push(dataOffer);
+  });
+
+  return dataOffersList;
+};

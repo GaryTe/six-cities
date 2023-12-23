@@ -6,7 +6,11 @@ export const Address = {
   Error: '*'
 } as const;
 
-export const isAuthorizationStatus = false;
+export const AuthorizationStatus = {
+  Auth: 'AUTH',
+  NoAuth: 'NO_AUTH',
+  Unknown: 'UNKNOWN'
+} as const;
 
 export const UserStatus = {
   SignIn: 'Sign in',
@@ -36,7 +40,11 @@ export const ValueKey = {
 
 export const NameReducer = {
   Offers: 'offers',
-  Reviews: 'reviews'
+  Reviews: 'reviews',
+  Offer: 'offer',
+  Nearby: 'nearby',
+  Authorization: 'authorization',
+  Favorite: 'favorite'
 } as const;
 
 export const Rating = {
@@ -46,3 +54,14 @@ export const Rating = {
   Badly: 'badly',
   Terribly: 'terribly'
 } as const;
+
+export const AdditionToAddress = {
+  Hotels: '/hotels',
+  Comments: '/comments/',
+  Nearby: '/nearby',
+  Login: '/login',
+  Logout: '/logout',
+  Favorite: '/favorite'
+} as const;
+
+export const AUTH_TOKEN_KEY_NAME = 'token';
