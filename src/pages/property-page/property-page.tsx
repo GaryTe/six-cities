@@ -184,7 +184,7 @@ export default function PropertyPage(): JSX.Element {
               </div>
               <section className="property__reviews reviews">
                 <ReviewComponent/>
-                {isAuthorizationStatus === AuthorizationStatus.Auth && <FeedbackFormComponent/>}
+                {isAuthorizationStatus === AuthorizationStatus.Auth && <FeedbackFormComponent index={id}/>}
               </section>
             </div>
           </div>

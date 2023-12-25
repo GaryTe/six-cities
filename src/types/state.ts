@@ -4,8 +4,7 @@ import {
   ReviewsList,
   Offer,
   DataAuthorization,
-  Error
-} from './response';
+  Error } from './response';
 
 export type StorageOffers = {
   loading: boolean;

@@ -7,7 +7,8 @@ import {
   ReviewsList,
   DataAuthorization,
   UserData,
-  ValueStatus
+  ValueStatus,
+  ValueForReview
 } from '../types/response';
 
 export const requestToGetOffersList = createAsyncThunk<Offers, undefined, {
@@ -101,6 +102,16 @@ export const requestChangesStatus = createAsyncThunk<Offer, ValueStatus, {
   'data/requestChangesStatus',
   async ({hotelId, status}, {extra: api}) => {
     const {data} = await api.post<Offer>(`${AdditionToAddress.Favorite}/${hotelId}/${Number(status)}`);
+    return data;
+  }
+);
+
+export const requestForReview = createAsyncThunk<ReviewsList, ValueForReview, {
+  extra: AxiosInstance;
+}>(
+  'data/requestForReview',
+  async ({index, comment, rating}, {extra: api}) => {
+    const {data} = await api.post<ReviewsList>(`${AdditionToAddress.Comments}${index}`, {comment, rating});
     return data;
   }
 );
