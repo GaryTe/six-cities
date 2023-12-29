@@ -19,7 +19,7 @@ export default function LoadingCardPlaceComponent({classForElement}: LoadingCard
   if(typeError) {
     return(
       <p className="text-loding" style={{backgroundColor: 'red'}}>
-        ${typeError.code}<br></br>
+        {typeError.code}<br></br>
         <br></br>
         Could not get offers nearby.
       </p>

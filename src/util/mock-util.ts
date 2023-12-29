@@ -1,3 +1,5 @@
+import { offers } from '../mocks/offers';
+
 export const mockOffersForPrice = [
   {
     city: {
@@ -693,5 +695,28 @@ export const mockReviews = [
     rating: 2,
     comment: 'The room was spacious and clean. The pool looked nothing like the photos and desparately needs a clean. The sauna and spa were closed for lunar new year holiday.',
     date: '2023-11-05T11:13:09.372Z'
+  }
+];
+
+export const mockOffersByCity = [
+  {
+    nameCity: 'Dusseldorf',
+    offers: [offers[0]]
+  },
+  {
+    nameCity: 'Paris',
+    offers: [offers[1]]
+  },
+  {
+    nameCity: 'Hamburg',
+    offers: [offers[2], offers[5]]
+  },
+  {
+    nameCity: 'Brussels',
+    offers: [offers[3]]
+  },
+  {
+    nameCity: 'Cologne',
+    offers: [offers[4]]
   }
 ];

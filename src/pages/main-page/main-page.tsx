@@ -5,7 +5,6 @@ import SortOffersListComponent from '../../components/sort-offers-list-component
 import NotFindPlacesComponent from '../../components/not-find-places-component/not-find-places-component';
 import { Offers } from '../../types/response';
 import {
-  CitiesList,
   NameSortList
 } from '../../const';
 import { useAppSelector } from '../../hooks/hooks-store/hooks-store';
@@ -20,10 +19,10 @@ type IndicatorOffer = {
 }
 
 export default function MainPage(): JSX.Element {
-  const {offers, changeOffers, typeError} = useAppSelector(storageOffers);
+  const {cityName, offers, changeOffers, typeError} = useAppSelector(storageOffers);
 
   const [indicatorOffer, setIndicatorOffer] = useState<IndicatorOffer>({
-    valueCitie: CitiesList.Paris,
+    valueCitie: cityName,
     valueSort: NameSortList.Popular,
     dataOffers: changeOffers
   });

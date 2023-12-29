@@ -1,4 +1,4 @@
-import {createSlice} from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import { StorageOffers } from '../../../types/state';
 import { RootState } from '../../store/store';
 import { NameReducer } from '../../../const';
@@ -8,6 +8,7 @@ import { requestToGetOffersList } from '../../../api/request';
 
 const initialState: StorageOffers = {
   loading: true,
+  cityName: CitiesList.Paris,
   offers: [],
   changeOffers: [],
   typeError: null
@@ -16,14 +17,22 @@ const initialState: StorageOffers = {
 export const offersListSlice = createSlice({
   name: NameReducer.Offers,
   initialState,
-  reducers: {},
+  reducers: {
+    changeNameCity: (state, action: PayloadAction<string>) => {
+      state.cityName = action.payload;
+      state.changeOffers = getSortOffersByCity({
+        offersList: state.offers,
+        nameCitie: action.payload
+      });
+    }
+  },
   extraReducers:(builder) => {
     builder
       .addCase(requestToGetOffersList.fulfilled, (state, action) => {
         state.offers = action.payload;
         state.changeOffers = getSortOffersByCity({
           offersList: action.payload,
-          nameCitie: CitiesList.Paris
+          nameCitie: state.cityName
         });
         state.loading = false;
       })
@@ -35,3 +44,4 @@ export const offersListSlice = createSlice({
 });
 
 export const storageOffers = (state: RootState) => state.offers;
+export const {changeNameCity} = offersListSlice.actions;
