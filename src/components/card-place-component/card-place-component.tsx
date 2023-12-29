@@ -11,7 +11,10 @@ import {
 } from '../../api/request';
 import { storageAuthorization } from '../../store/slice-reducer/authorization-slice/authorization-slice';
 import { Offers } from '../../types/response';
-import { Address } from '../../const';
+import {
+  Address,
+  AuthorizationStatus
+} from '../../const';
 
 type CardPlaceComponentProps = {
   offers: Offers;
@@ -86,7 +89,7 @@ export default function CardPlaceComponent({
                   className={!isFavorite ? 'place-card__bookmark-button button' : 'place-card__bookmark-button place-card__bookmark-button--active button'}
                   type="button"
                   onClick={() => {
-                    if(isAuthorizationStatus) {
+                    if(isAuthorizationStatus === AuthorizationStatus.Auth) {
                       dispatch(requestChangesStatus({
                         hotelId: id,
                         status: !isFavorite

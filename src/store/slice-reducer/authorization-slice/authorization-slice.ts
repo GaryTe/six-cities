@@ -42,7 +42,7 @@ export const authorizationSlice = createSlice({
       })
       .addCase(requestAuthorizationOnServer.rejected, (state, action) => {
         state.typeError = action.error;
-        state.isAuthorizationStatus = AuthorizationStatus.Auth;
+        state.isAuthorizationStatus = AuthorizationStatus.NoAuth;
       })
       .addCase(requestEndUserSession.fulfilled, (state) => {
         state.isAuthorizationStatus = AuthorizationStatus.NoAuth;
@@ -50,6 +50,7 @@ export const authorizationSlice = createSlice({
         dropToken();
       })
       .addCase(requestEndUserSession.rejected, (state, action) => {
+        state.isAuthorizationStatus = AuthorizationStatus.NoAuth;
         state.typeError = action.error;
       });
   }

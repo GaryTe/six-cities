@@ -11,7 +11,10 @@ import PropertyPage from '../../pages/property-page/property-page';
 import PrivateRouteComponent from '../private-route-componente/private-route-component';
 import LoginPage from '../../pages/login-page/login-page';
 import ErrorComponent from '../error-component/error-component';
-import { Address } from '../../const';
+import {
+  Address,
+  AuthorizationStatus
+} from '../../const';
 import { mockOffersForPrice } from '../../util/mock-util';
 import { reviews } from '../../mocks/reviews';
 
@@ -32,7 +35,16 @@ const store = mockStore({
     offers: mockOffersForPrice,
     changeOffers: [mockOffersForPrice[0]]
   },
-  reviews: {reviews: reviews}
+  reviews: {
+    reviews: reviews
+  },
+  authorization: {
+    isAuthorizationStatus: AuthorizationStatus.NoAuth,
+    dataAuthorization: null,
+  },
+  favorite: {
+    offersList: [],
+  }
 });
 
 

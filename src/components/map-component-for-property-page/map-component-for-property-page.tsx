@@ -13,6 +13,8 @@ export default function MapComponentForPropertyPage({offer, offers}: MapComponen
   const mapRef = useRef<HTMLElement | null>(null);
   const groupPoints = useRef<LayerGroup | null>(null);
 
+  const [ferstList] = offers;
+
   useEffect(() => {
 
     const activeCustomIcon = L.icon({
@@ -46,7 +48,7 @@ export default function MapComponentForPropertyPage({offer, offers}: MapComponen
     };
   },[offer, offers]);
 
-  const map = useCreatMap(mapRef, offers);
+  const map = useCreatMap(mapRef, ferstList);
 
   if(map !== null && groupPoints.current !== null) {
     groupPoints.current.addTo(map);

@@ -2,17 +2,23 @@ import {
   getSortOffersByCity,
   getSortOffersBySort,
   humanizingData,
-  filterLatestReviews
+  filterLatestReviews,
+  checkEmail,
+  checkPassword,
+  sortOffersByCity,
+  getRandomNumber
 } from './util';
 import {
   mockOffersForPrice,
-  mockOffersForRating
+  mockOffersForRating,
+  mockOffersByCity
 } from './mock-util';
 import {
   NameSortList,
   CitiesList
 } from '../const';
 import { reviews } from '../mocks/reviews';
+import { offers } from '../mocks/offers';
 
 describe('Test util function', () => {
   describe('Test util function "getSortOffersByCity"', () => {
@@ -120,6 +126,33 @@ describe('Test util function', () => {
           date: '2023-07-05T11:13:09.372Z'
         }
       ]);
+    });
+  });
+  describe('Test util function "checkEmail"', () => {
+    test('Checking email for correctness', () => {
+      expect(checkEmail('vlad@vankov.ru')).toBeTruthy();
+    });
+    test('Checking for invalid email', () => {
+      expect(checkEmail('vlad.ru')).toBeFalsy();
+    });
+  });
+  describe('Test util function "checkPassword"', () => {
+    test('Checking password for correctness', () => {
+      expect(checkPassword('V1')).toBeTruthy();
+    });
+    test('Checking for invalid password', () => {
+      expect(checkPassword('V!')).toBeFalsy();
+    });
+  });
+  describe('Test util function "sortOffersByCity"', () => {
+    test('Sort offers by city', () => {
+      expect(sortOffersByCity(offers)).toEqual(mockOffersByCity);
+    });
+  });
+  describe('Test util function "getRandomNumber"', () => {
+    test('Checking for a random number', () => {
+      expect(getRandomNumber(0, 5)).not.toBeNull();
+      expect(getRandomNumber(0,5)).not.toBeUndefined();
     });
   });
 });

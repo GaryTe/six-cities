@@ -7,7 +7,6 @@ import {render, screen, fireEvent} from '@testing-library/react';
 import ErrorComponent from './error-component';
 import MainPage from '../../pages/main-page/main-page';
 import { Address } from '../../const';
-//import { offers } from '../../mocks/offers';
 
 jest.mock('../../pages/main-page/main-page', () => function MockMainPage (): JSX.Element {
   return(
@@ -63,8 +62,6 @@ describe('Test component "ErrorComponent"', () => {
         cancelable: true
       })
     );
-
-    //render(mockRender);
 
     expect(screen.getByText('MainPage')).toBeInTheDocument();
   });

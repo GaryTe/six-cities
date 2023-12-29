@@ -1,15 +1,13 @@
 import {useState, useEffect, MutableRefObject} from 'react';
 import L, { Map } from 'leaflet';
-import { Offers } from '../../types/response';
+import { Offer } from '../../types/response';
 
 export const useCreatMap = (
   mapRef: MutableRefObject<HTMLElement | null>,
-  offers: Offers,
+  ferstList: Offer,
   idOffer?: number
 ) => {
   const [map, setMap] = useState<null | Map>(null);
-
-  const [ferstList] = offers;
 
   useEffect(() => {
     const {current} = mapRef;

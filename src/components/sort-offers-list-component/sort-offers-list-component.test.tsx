@@ -1,3 +1,5 @@
+import {configureMockStore} from '@jedmao/redux-mock-store';
+import {Provider} from 'react-redux';
 import {useState} from 'react';
 import {BrowserRouter} from 'react-router-dom';
 import {render, screen, fireEvent} from '@testing-library/react';
@@ -5,9 +7,12 @@ import SortOffersListComponent from './sort-offers-list-component';
 import { Offers } from '../../types/response';
 import {
   CitiesList,
-  NameSortList
+  NameSortList,
+  AuthorizationStatus
 } from '../../const';
 import { offers } from '../../mocks/offers';
+
+const mockStore = configureMockStore();
 
 type IndicatorOffer = {
   valueCitie: string;
@@ -36,10 +41,16 @@ function MockMainPage(): JSX.Element {
 
 describe('Test component "OffersListComponent"', () => {
   test('Correct component "OffersListComponent" rendering', () => {
+    const store = mockStore({
+      authorization: {isAuthorizationStatus: AuthorizationStatus.NoAuth}
+    });
+
     render(
-      <BrowserRouter>
-        <MockMainPage/>
-      </BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
+          <MockMainPage/>
+        </BrowserRouter>
+      </Provider>
     );
 
     const spanElement = screen.getByTestId('spanElement');

@@ -155,3 +155,11 @@ export const sortOffersByCity = (offersList: Offers) => {
 
   return dataOffersList;
 };
+
+export const getRandomNumber = (min: number, max: number): number => {
+
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+

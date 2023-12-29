@@ -8,6 +8,7 @@ import {
 
 export type StorageOffers = {
   loading: boolean;
+  cityName: string;
   offers: Offers;
   changeOffers: Offers;
   typeError: null | SerializedError;

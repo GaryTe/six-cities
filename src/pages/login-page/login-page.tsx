@@ -6,7 +6,8 @@ import {
 import HeaderLoginComponent from '../../components/header-login-component/header-login-component';
 import {
   checkEmail,
-  checkPassword
+  checkPassword,
+  getRandomNumber
 } from '../../util/util';
 import {
   requestAuthorizationOnServer,
@@ -15,7 +16,11 @@ import {
 import { resetError } from '../../store/slice-reducer/favorite-slice/favorite-slice';
 import { resetErrorAuthorization } from '../../store/slice-reducer/authorization-slice/authorization-slice';
 import { useAppDispatch } from '../../hooks/hooks-store/hooks-store';
-import { Address } from '../../const';
+import { changeNameCity } from '../../store/slice-reducer/offers-list-slice/offers-list-slice';
+import {
+  Address,
+  CitiesList
+} from '../../const';
 import { ValueStatus } from '../../types/response';
 
 type Location = {
@@ -37,6 +42,9 @@ export default function LoginPage(): JSX.Element {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const randomNumber = getRandomNumber(0, Object.values(CitiesList).length);
+  const randomNameCity = Object.values(CitiesList)[randomNumber];
 
   const path = typeof state === 'string' ? state : Address.Favorites;
 
@@ -144,8 +152,16 @@ export default function LoginPage(): JSX.Element {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <a className="locations__item-link" href="#todo">
-                <span>Amsterdam</span>
+              <a
+                className="locations__item-link"
+                href="#todo"
+                onClick={(evt) => {
+                  evt.preventDefault();
+                  dispatch(changeNameCity(randomNameCity));
+                  navigate(Address.Main);
+                }}
+              >
+                <span>{randomNameCity}</span>
               </a>
             </div>
           </section>

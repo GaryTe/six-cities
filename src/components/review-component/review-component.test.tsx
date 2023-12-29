@@ -10,7 +10,11 @@ const mockStore = configureMockStore();
 describe('Test component "ReviewComponent"', () => {
   test('Correct component "ReviewComponent" rendering', () => {
     const store = mockStore({
-      reviews: {reviews: reviews}
+      reviews: {
+        loading: false,
+        reviews: reviews,
+        typeError: null
+      }
     });
 
     render(
@@ -33,9 +37,13 @@ describe('Test component "ReviewComponent"', () => {
       expect(commet).toBeInTheDocument();
     });
   });
-  test('If the array is null then rendering "No reviews"',() => {
+  test('If there are no reviews then rendering "No reviews"',() => {
     const store = mockStore({
-      reviews: {reviews: []}
+      reviews: {
+        loading: false,
+        reviews: [],
+        typeError: null
+      }
     });
 
     render(

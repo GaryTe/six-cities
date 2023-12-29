@@ -1,9 +1,22 @@
+import {configureMockStore} from '@jedmao/redux-mock-store';
+import {Provider} from 'react-redux';
 import {BrowserRouter} from 'react-router-dom';
 import {render, screen, fireEvent} from '@testing-library/react';
 import CardPlaceComponent from './card-place-component';
 import App from '../app/app';
 import { offers } from '../../mocks/offers';
-import { Address } from '../../const';
+import {
+  Address,
+  AuthorizationStatus
+} from '../../const';
+
+const mockStore = configureMockStore();
+
+const store = mockStore({
+  authorization: {
+    isAuthorizationStatus: AuthorizationStatus.NoAuth
+  }
+});
 
 const classForElement = {
   classForDivElement: {
@@ -17,9 +30,11 @@ const classForElement = {
 describe('Test component "CardPlaceComponent"', () => {
   test('Correct component "CardPlaceComponent" rendering', () => {
     render(
-      <BrowserRouter>
-        <CardPlaceComponent offers={offers} classForElement={classForElement}/>
-      </BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
+          <CardPlaceComponent offers={offers} classForElement={classForElement}/>
+        </BrowserRouter>
+      </Provider>
     );
 
     const itemsRatingList = screen.getAllByText('Rating');
@@ -35,9 +50,11 @@ describe('Test component "CardPlaceComponent"', () => {
   test(`Correct page "LoginPage" rendering if
   click button in the component "CardPlaceComponent"`, () => {
     render(
-      <BrowserRouter>
-        <CardPlaceComponent offers={offers} classForElement={classForElement}/>
-      </BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
+          <CardPlaceComponent offers={offers} classForElement={classForElement}/>
+        </BrowserRouter>
+      </Provider>
     );
 
     const buttons = screen.getAllByRole('button');
@@ -59,7 +76,9 @@ describe('Test component "CardPlaceComponent"', () => {
     );
 
     render(
-      <App/>
+      <Provider store={store}>
+        <App/>
+      </Provider>
     );
 
     expect(screen.getByTestId('email')).toBeInTheDocument();
