@@ -34,6 +34,11 @@ describe('Test page "MainPage"', () => {
           offers: mockOffersForPrice,
           changeOffers: [mockOffersForPrice[0]],
           typeError: null
+        },
+        authorization: {
+          typeErrorAuthorization: {
+            error: 'You are not logged in or you do not have permission to this page.'
+          }
         }
       })}
       >

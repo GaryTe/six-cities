@@ -1,4 +1,5 @@
 import {useState, useRef} from 'react';
+import {toast} from 'react-toastify';
 import StarsRatingComponent from '../stars-rating-component/stars-rating-component';
 import { useAppDispatch } from '../../hooks/hooks-store/hooks-store';
 import { requestForReview } from '../../api/request';
@@ -6,6 +7,16 @@ import { requestForReview } from '../../api/request';
 type FeedbackFormComponentProps = {
   index: number;
 }
+
+type Response = {
+  error: {
+    code: string;
+  };
+  };
+
+  type ErrorMessage = {
+    message: string;
+  };
 
 export default function FeedbackFormComponent({index}: FeedbackFormComponentProps): JSX.Element {
   const refTextarea = useRef<null | HTMLTextAreaElement>(null);
@@ -17,18 +28,33 @@ export default function FeedbackFormComponent({index}: FeedbackFormComponentProp
 
   const submitForm = () => {
     setLockForm(true);
+    toast.loading('Sending user comment. Wait please.');
 
     dispatch(requestForReview({
       index,
       comment: review,
       rating
     }))
+      .then((response) => {
+        if(response.meta.requestStatus !== 'rejected') {
+          return response;
+        }
+
+        const {error: {code}} = response as Response;
+        throw new Error(code);
+      })
       .then(() => {
+        toast.dismiss();
+        toast.success('Comment received.', {autoClose: 6000});
         setLockForm(false);
         setReview('');
         if(refTextarea.current) {refTextarea.current.value = '';}
         setRating(0);
-      }).catch(() => {
+      })
+      .catch((error) => {
+        const {message} = error as ErrorMessage;
+        toast.dismiss();
+        toast.error(message, {autoClose: 6000});
         setLockForm(false);
       });
   };

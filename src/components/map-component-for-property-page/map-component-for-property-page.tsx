@@ -12,11 +12,12 @@ type MapComponentForPropertyPageProps = {
 export default function MapComponentForPropertyPage({offer, offers}: MapComponentForPropertyPageProps): JSX.Element {
   const mapRef = useRef<HTMLElement | null>(null);
   const groupPoints = useRef<LayerGroup | null>(null);
+  const idexRef = useRef<null | number>(null);
 
   const [ferstList] = offers;
+  const {id} = ferstList;
 
   useEffect(() => {
-
     const activeCustomIcon = L.icon({
       iconUrl: 'img/pin-active.svg',
       iconSize: [40, 40],
@@ -41,12 +42,15 @@ export default function MapComponentForPropertyPage({offer, offers}: MapComponen
 
     });
     groupPoints.current = layerGroup;
+    idexRef.current = id;
 
     return () => {
+      if(id === idexRef.current) {return;}
+
       layerGroup.clearLayers();
       groupPoints.current = null;
     };
-  },[offer, offers]);
+  },[offer, offers, id]);
 
   const map = useCreatMap(mapRef, ferstList);
 

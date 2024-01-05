@@ -3,6 +3,7 @@ import {
   useNavigate,
   useLocation
 } from 'react-router-dom';
+import {toast} from 'react-toastify';
 import HeaderLoginComponent from '../../components/header-login-component/header-login-component';
 import {
   checkEmail,
@@ -15,7 +16,9 @@ import {
 } from '../../api/request';
 import { resetError } from '../../store/slice-reducer/favorite-slice/favorite-slice';
 import { resetErrorAuthorization } from '../../store/slice-reducer/authorization-slice/authorization-slice';
-import { useAppDispatch } from '../../hooks/hooks-store/hooks-store';
+import {
+  useAppDispatch,
+} from '../../hooks/hooks-store/hooks-store';
 import { changeNameCity } from '../../store/slice-reducer/offers-list-slice/offers-list-slice';
 import {
   Address,
@@ -26,6 +29,16 @@ import { ValueStatus } from '../../types/response';
 type Location = {
   state: ValueStatus;
 }
+
+type Response = {
+error: {
+  code: string;
+};
+};
+
+type ErrorMessage = {
+  message: string;
+};
 
 export default function LoginPage(): JSX.Element {
 
@@ -61,6 +74,8 @@ export default function LoginPage(): JSX.Element {
     }
 
     if(dataValue.email && dataValue.password && refEmail.current && refPassword.current) {
+      toast.loading('Sending user data. Wait please.');
+
       setDataValue({...dataValue, button: true});
 
       const inputEmail = refEmail.current;
@@ -69,32 +84,41 @@ export default function LoginPage(): JSX.Element {
       dispatch(requestAuthorizationOnServer({
         email: refEmail.current.value,
         password: refPassword.current.value
-      })).then(() => {
-        inputEmail.value = '';
-        inputPassword.value = '';
+      }))
+        .then((response) => {
+          if(response.meta.requestStatus !== 'rejected') {
+            return response;
+          }
 
-        setDataValue({
-          email: false,
-          password: false,
-          button: false
+          const {error: {code}} = response as Response;
+          throw new Error(code);
+        })
+        .then(() => {
+          toast.dismiss();
+          toast.success('Data receved', {autoClose: 6000});
+
+          inputEmail.value = '';
+          inputPassword.value = '';
+
+          setDataValue({
+            email: false,
+            password: false,
+            button: false
+          });
+
+          if(state && typeof state === 'object') {
+            dispatch(requestChangesStatus(state));
+          }
+
+          dispatch(resetError());
+          dispatch(resetErrorAuthorization());
+          navigate(path);
+        })
+        .catch((error) => {
+          const {message} = error as ErrorMessage;
+          toast.dismiss();
+          toast.error(message, {autoClose: 6000});
         });
-
-        if(state && typeof state === 'object') {
-          dispatch(requestChangesStatus(state));
-        }
-
-        dispatch(resetError());
-        dispatch(resetErrorAuthorization());
-        navigate(path);
-      }).catch(() => {
-
-        setDataValue({
-          email: false,
-          password: false,
-          button: false
-        });
-
-      });
     }
   };
 

@@ -16,14 +16,14 @@ import {
 const initialState: StorageAuthorization = {
   isAuthorizationStatus: AuthorizationStatus.Unknown,
   dataAuthorization: null,
-  typeError: null
+  typeErrorAuthorization: null
 };
 
 export const authorizationSlice = createSlice({
   name: NameReducer.Authorization,
   initialState,
   reducers: {
-    resetErrorAuthorization: (state) => {state.typeError = null;}
+    resetErrorAuthorization: (state) => {state.typeErrorAuthorization = null;}
   },
   extraReducers: (builder) => {
     builder
@@ -32,7 +32,7 @@ export const authorizationSlice = createSlice({
         state.isAuthorizationStatus = AuthorizationStatus.Auth;
       })
       .addCase(requestCheckingAuthorizationStatus.rejected, (state, action) => {
-        state.typeError = action.payload as Error;
+        state.typeErrorAuthorization = action.payload as Error;
         state.isAuthorizationStatus = AuthorizationStatus.NoAuth;
       })
       .addCase(requestAuthorizationOnServer.fulfilled, (state, action) => {
@@ -41,7 +41,7 @@ export const authorizationSlice = createSlice({
         saveToken(action.payload.token);
       })
       .addCase(requestAuthorizationOnServer.rejected, (state, action) => {
-        state.typeError = action.error;
+        state.typeErrorAuthorization = action.error;
         state.isAuthorizationStatus = AuthorizationStatus.NoAuth;
       })
       .addCase(requestEndUserSession.fulfilled, (state) => {
@@ -51,7 +51,7 @@ export const authorizationSlice = createSlice({
       })
       .addCase(requestEndUserSession.rejected, (state, action) => {
         state.isAuthorizationStatus = AuthorizationStatus.NoAuth;
-        state.typeError = action.error;
+        state.typeErrorAuthorization = action.error;
       });
   }
 });

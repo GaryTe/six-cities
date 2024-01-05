@@ -1,14 +1,16 @@
 import { useState } from 'react';
+import {toast} from 'react-toastify';
 import HeaderComponent from '../../components/header-component/header-component';
 import CitiesListComponent from '../../components/cities-list-component/cities-list-component';
 import SortOffersListComponent from '../../components/sort-offers-list-component/sort-offers-list-component';
 import NotFindPlacesComponent from '../../components/not-find-places-component/not-find-places-component';
-import { Offers } from '../../types/response';
+import { Offers, Error } from '../../types/response';
 import {
   NameSortList
 } from '../../const';
 import { useAppSelector } from '../../hooks/hooks-store/hooks-store';
 import { storageOffers } from '../../store/slice-reducer/offers-list-slice/offers-list-slice';
+import { storageAuthorization } from '../../store/slice-reducer/authorization-slice/authorization-slice';
 import '../../components/loading-main-page-component/loading-items.css';
 import './parameters-text-error.css';
 
@@ -20,6 +22,7 @@ type IndicatorOffer = {
 
 export default function MainPage(): JSX.Element {
   const {cityName, offers, changeOffers, typeError} = useAppSelector(storageOffers);
+  const {typeErrorAuthorization} = useAppSelector(storageAuthorization);
 
   const [indicatorOffer, setIndicatorOffer] = useState<IndicatorOffer>({
     valueCitie: cityName,
@@ -35,6 +38,11 @@ export default function MainPage(): JSX.Element {
         </p>
       </div>
     );
+  }
+
+  if(typeErrorAuthorization) {
+    const {error} = typeErrorAuthorization as Error;
+    toast.error(error, { autoClose: 10000 });
   }
 
   return(
