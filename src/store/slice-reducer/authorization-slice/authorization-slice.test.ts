@@ -15,14 +15,14 @@ describe('Test slice "authorizationSlice"', () => {
     const state = {
       isAuthorizationStatus: AuthorizationStatus.Unknown,
       dataAuthorization: null,
-      typeError: { error: 'You are not logged in or you do not have permission to this page.'}
+      typeErrorAuthorization: { error: 'You are not logged in or you do not have permission to this page.'}
     };
 
     expect(authorizationSlice.reducer(state, resetErrorAuthorization()))
       .toEqual({
         isAuthorizationStatus: AuthorizationStatus.Unknown,
         dataAuthorization: null,
-        typeError: null
+        typeErrorAuthorization: null
       });
   });
   test('Positive check authorization user', () => {
@@ -56,7 +56,7 @@ describe('Test slice "authorizationSlice"', () => {
           token: 'T2xpdmVyLmNvbm5lckBnbWFpbC5jb20='
         }
       },
-      typeError: null
+      typeErrorAuthorization: null
     });
   });
   test('Negative check authorization user', () => {
@@ -73,7 +73,7 @@ describe('Test slice "authorizationSlice"', () => {
     )).toEqual({
       isAuthorizationStatus: AuthorizationStatus.NoAuth,
       dataAuthorization: null,
-      typeError: { error: 'You are not logged in or you do not have permission to this page.'}
+      typeErrorAuthorization: { error: 'You are not logged in or you do not have permission to this page.'}
     });
   });
   test('Positive request for authorization user', () => {
@@ -102,7 +102,7 @@ describe('Test slice "authorizationSlice"', () => {
         name: 'Oliver.conner',
         token: 'T2xpdmVyLmNvbm5lckBnbWFpbC5jb20='
       },
-      typeError: null
+      typeErrorAuthorization: null
     });
   });
   test('Negative request for authorization user', () => {
@@ -117,7 +117,7 @@ describe('Test slice "authorizationSlice"', () => {
     )).toEqual({
       isAuthorizationStatus: AuthorizationStatus.NoAuth,
       dataAuthorization: null,
-      typeError: {}
+      typeErrorAuthorization: {}
     });
   });
   test('Positive request for end user session', () => {
@@ -131,7 +131,7 @@ describe('Test slice "authorizationSlice"', () => {
         name: 'Oliver.conner',
         token: 'T2xpdmVyLmNvbm5lckBnbWFpbC5jb20='
       },
-      typeError: null
+      typeErrorAuthorization: null
     };
 
     expect(authorizationSlice.reducer(
@@ -142,7 +142,7 @@ describe('Test slice "authorizationSlice"', () => {
     )).toEqual({
       isAuthorizationStatus: AuthorizationStatus.NoAuth,
       dataAuthorization: null,
-      typeError: null
+      typeErrorAuthorization: null
     });
   });
   test('Negative request for end user session', () => {
@@ -157,7 +157,7 @@ describe('Test slice "authorizationSlice"', () => {
     )).toEqual({
       isAuthorizationStatus: AuthorizationStatus.NoAuth,
       dataAuthorization: null,
-      typeError: {}
+      typeErrorAuthorization: {}
     });
   });
 });

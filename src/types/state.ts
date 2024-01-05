@@ -35,7 +35,7 @@ export type StorageOffersListNearby = {
 export type StorageAuthorization = {
   isAuthorizationStatus: string;
   dataAuthorization: null | DataAuthorization ;
-  typeError: null | Error | SerializedError;
+  typeErrorAuthorization: null | Error | SerializedError;
 };
 
 export type StorageOffersListFavorite = {
