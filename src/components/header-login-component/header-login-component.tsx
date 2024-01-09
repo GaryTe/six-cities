@@ -1,10 +1,23 @@
+import {useLocation, Link} from 'react-router-dom';
+import { Address } from '../../const';
+
+type Location = {
+  state: string;
+}
+
 export default function HeaderLoginComponent(): JSX.Element {
+  const {state} = useLocation() as Location;
+
   return(
     <header className="header">
       <div className="container">
         <div className="header__wrapper">
           <div className="header__left">
-            <a className="header__logo-link" href="main.html">
+            <Link
+              className="header__logo-link"
+              to={state}
+              state={Address.Main}
+            >
               <img
                 className="header__logo"
                 src="img/logo.svg"
@@ -12,7 +25,7 @@ export default function HeaderLoginComponent(): JSX.Element {
                 width={81}
                 height={41}
               />
-            </a>
+            </Link>
           </div>
         </div>
       </div>

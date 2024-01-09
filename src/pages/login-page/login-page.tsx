@@ -25,6 +25,7 @@ import {
   CitiesList
 } from '../../const';
 import { ValueStatus } from '../../types/response';
+import './border_error.css';
 
 type Location = {
   state: ValueStatus;
@@ -141,7 +142,7 @@ export default function LoginPage(): JSX.Element {
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">E-mail</label>
                 <input
-                  className="login__input form__input"
+                  className={dataValue.email ? 'login__input form__input' : 'login__input form__input border_error'}
                   type="email"
                   name="email"
                   placeholder="Email"
@@ -149,13 +150,12 @@ export default function LoginPage(): JSX.Element {
                   data-testid="email"
                   defaultValue={'Введите корректный email.'}
                   ref={refEmail}
-                  disabled={dataValue.email}
                 />
               </div>
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">Password</label>
                 <input
-                  className="login__input form__input"
+                  className={dataValue.password ? 'login__input form__input' : 'login__input form__input border_error'}
                   name="password"
                   placeholder="Password"
                   required

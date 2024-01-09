@@ -50,7 +50,6 @@ export const authorizationSlice = createSlice({
         dropToken();
       })
       .addCase(requestEndUserSession.rejected, (state, action) => {
-        state.isAuthorizationStatus = AuthorizationStatus.NoAuth;
         state.typeErrorAuthorization = action.error;
       });
   }

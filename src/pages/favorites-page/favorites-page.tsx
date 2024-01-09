@@ -1,3 +1,4 @@
+import {Link} from 'react-router-dom';
 import HeaderComponent from '../../components/header-component/header-component';
 import FooterComponents from '../../components/footer-component/footer-component';
 import {
@@ -7,6 +8,7 @@ import {
 import { requestChangesStatus } from '../../api/request';
 import { storageOffersListFavorite } from '../../store/slice-reducer/favorite-slice/favorite-slice';
 import { sortOffersByCity } from '../../util/util';
+import { Address } from '../../const';
 
 export default function FavoritesPage(): JSX.Element {
 
@@ -66,7 +68,11 @@ export default function FavoritesPage(): JSX.Element {
                 <li key={dataOffer.nameCity} className="favorites__locations-items">
                   <div className="favorites__locations locations locations--current">
                     <div className="locations__item">
-                      <a className="locations__item-link" href="#todo">
+                      <a
+                        className="locations__item-link"
+                        href="#todo"
+                        onClick={(evt) => evt.preventDefault()}
+                      >
                         <span>{dataOffer.nameCity}</span>
                       </a>
                     </div>
@@ -91,7 +97,7 @@ export default function FavoritesPage(): JSX.Element {
                             <span>Premium</span>
                           </div>}
                           <div className="favorites__image-wrapper place-card__image-wrapper">
-                            <a href="#todo">
+                            <a href="#todo" onClick={(evt) => evt.preventDefault()}>
                               <img
                                 className="place-card__image"
                                 src={previewImage}
@@ -136,7 +142,12 @@ export default function FavoritesPage(): JSX.Element {
                               </div>
                             </div>
                             <h2 className="place-card__name">
-                              <a href="#todo">{title}</a>
+                              <Link
+                                to={`${Address.Room}${id}`}
+                                state={Address.Main}
+                              >
+                                {title}
+                              </Link>
                             </h2>
                             <p className="place-card__type">{`${type[0].toUpperCase()}${type.slice(1)}`}</p>
                           </div>
