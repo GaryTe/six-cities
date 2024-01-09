@@ -352,10 +352,11 @@ describe('Test function request to server', () => {
     await store.dispatch(requestEndUserSession());
 
     const actions = store.getActions().map(({type}) => type);
+
     expect(actions)
       .toEqual([
         'data/requestEndUserSession/pending',
-        'data/requestEndUserSession/rejected'
+        'data/requestEndUserSession/fulfilled',
       ]);
   });
   test('Positive test function "requestOffersListFavorite"', async () => {

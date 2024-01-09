@@ -69,7 +69,7 @@ export default function CardPlaceComponent({
             <span>Premium</span>
           </div>}
             <div className={secondClass}>
-              <a href="#todo">
+              <a href="#todo" onClick={(evt) => evt.preventDefault()}>
                 <img
                   className="place-card__image"
                   src={previewImage}
@@ -124,6 +124,7 @@ export default function CardPlaceComponent({
                     dispatch(requestToGetOffersNearby(id));
                   }}
                   to={`${Address.Room}${id}`}
+                  state={Address.Main}
                 >
                   {title}
                 </Link>

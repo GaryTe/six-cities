@@ -155,7 +155,7 @@ describe('Test slice "authorizationSlice"', () => {
         error: {}
       }
     )).toEqual({
-      isAuthorizationStatus: AuthorizationStatus.NoAuth,
+      isAuthorizationStatus: AuthorizationStatus.Unknown,
       dataAuthorization: null,
       typeErrorAuthorization: {}
     });

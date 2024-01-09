@@ -3,7 +3,8 @@ import { RootState } from '../../store/store';
 import { StorageOffersListFavorite } from '../../../types/state';
 import {
   requestOffersListFavorite,
-  requestChangesStatus
+  requestChangesStatus,
+  requestEndUserSession
 } from '../../../api/request';
 import { NameReducer } from '../../../const';
 
@@ -50,6 +51,9 @@ export const favoriteSlice = createSlice({
       .addCase(requestChangesStatus.rejected, (state, action) => {
         state.typeError = action.error;
         state.loading = false;
+      })
+      .addCase(requestEndUserSession.fulfilled, (state) => {
+        state.offersList = [];
       });
   }
 });

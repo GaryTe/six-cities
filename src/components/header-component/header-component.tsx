@@ -1,4 +1,8 @@
-import {Link, useLocation} from 'react-router-dom';
+import {
+  Link,
+  useLocation,
+  useNavigate
+} from 'react-router-dom';
 import {
   Address,
   AuthorizationStatus,
@@ -12,11 +16,17 @@ import { storageAuthorization } from '../../store/slice-reducer/authorization-sl
 import { storageOffersListFavorite } from '../../store/slice-reducer/favorite-slice/favorite-slice';
 import { requestEndUserSession } from '../../api/request';
 
+type Location = {
+  pathname: string;
+  state: string;
+}
+
 export default function HeaderComponent(): JSX.Element {
   const {isAuthorizationStatus, dataAuthorization} = useAppSelector(storageAuthorization);
   const {offersList} = useAppSelector(storageOffersListFavorite);
 
-  const {pathname} = useLocation();
+  const {pathname, state} = useLocation() as Location;
+  const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
   const {SignIn, SingOut} = UserStatus;
@@ -26,7 +36,14 @@ export default function HeaderComponent(): JSX.Element {
       <div className="container">
         <div className="header__wrapper">
           <div className="header__left">
-            <a className="header__logo-link header__logo-link--active" href="#todo">
+            <a
+              className="header__logo-link header__logo-link--active"
+              href={pathname}
+              onClick={(evt) => {
+                evt.preventDefault();
+                if(pathname !== Address.Main) {navigate(state, {state: Address.Main});}
+              }}
+            >
               <img
                 className="header__logo"
                 src="img/logo.svg"
@@ -43,6 +60,7 @@ export default function HeaderComponent(): JSX.Element {
                 <Link
                   className="header__nav-link header__nav-link--profile"
                   to={Address.Favorites}
+                  state={pathname}
                 >
                   <div
                     className="header__avatar-wrapper user__avatar-wrapper"
@@ -59,12 +77,16 @@ export default function HeaderComponent(): JSX.Element {
               </li>}
               <li className="header__nav-item">
                 {isAuthorizationStatus === AuthorizationStatus.Auth ?
-                  <span
-                    className="header__signout"
-                    onClick={() => {dispatch(requestEndUserSession());}}
+                  <a
+                    className="header__nav-link"
+                    href="#todo"
+                    onClick={(evt) => {
+                      evt.preventDefault();
+                      dispatch(requestEndUserSession());
+                    }}
                   >
-                    {SingOut}
-                  </span>
+                    <span className="header__signout">{SingOut}</span>
+                  </a>
                   :
                   <Link className="header__nav-link" to={Address.Login} state={pathname}>
                     <span className="header__login">{SignIn}</span>

@@ -1,5 +1,6 @@
 import {createAsyncThunk, } from '@reduxjs/toolkit';
 import {AxiosInstance, AxiosError} from 'axios';
+import {toast} from 'react-toastify';
 import { AdditionToAddress } from '../const';
 import {
   Offers,
@@ -82,7 +83,22 @@ export const requestEndUserSession = createAsyncThunk<void, undefined, {
 }>(
   'data/requestEndUserSession',
   async (arg, {extra: api}) => {
-    await api.delete(AdditionToAddress.Logout);
+    toast.loading('Request to end user session. Please wait.');
+    try{
+      const response = await api.delete(AdditionToAddress.Logout);
+      if(response.status >= 400) {
+        throw new Error();
+      }
+      toast.dismiss();
+      toast.success('User session completed', {autoClose: 6000});
+    }catch(error){
+      const {message} = error as AxiosError;
+      toast.dismiss();
+      toast.error(
+        `User session not logged out error: ${message}`,
+        {autoClose: 6000}
+      );
+    }
   }
 );
 
